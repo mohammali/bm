@@ -1,0 +1,33 @@
+spring:
+
+  application:
+    name: "BM"
+
+  datasource:
+    url: "jdbc:ucanaccess:///Users/mxninja/dev/projects/bm/data/accountsdb.accdb"
+    driver-class-name: net.ucanaccess.jdbc.UcanaccessDriver
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.SQLServerDialect"
+
+  mvc:
+    format:
+      date: "yyyy-MM-dd"
+      date-time: "yyyy-MM-dd_HH:mm:ss"
+      time: "HH:mm:ss"
+
+application:
+  version: "${ACTIVE_VERSION:non}"
+
+# Swagger
+swagger:
+  service:
+    version: ${application.version}
+    title: ${spring.application.name}
+    description: ""
+    termsPath: ""
+    email: "mohammali-@hotmail.com"
+    licenceType: ""
+    licencePath: ""
