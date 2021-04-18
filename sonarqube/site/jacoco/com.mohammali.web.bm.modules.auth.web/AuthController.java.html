@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bm</a> &gt; <a href="index.source.html" class="el_package">com.mohammali.web.bm.modules.auth.web</a> &gt; <span class="el_source">AuthController.java</span></div><h1>AuthController.java</h1><pre class="source lang-java linenums">package com.mohammali.web.bm.modules.auth.web;
+
+import com.mohammali.web.bm.common.exceptions.UserLoggedInException;
+import com.mohammali.web.bm.common.exceptions.WrongCredentialsException;
+import com.mohammali.web.bm.modules.auth.data.AuthUseCase;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping(&quot;api.auth&quot;)
+<span class="fc" id="L18">@RequiredArgsConstructor</span>
+public class AuthController {
+
+    private final AuthUseCase authUseCase;
+
+    @PostMapping(&quot;login&quot;)
+    public ResponseEntity&lt;String&gt; login(
+        HttpServletRequest request,
+        @RequestParam(&quot;username&quot;) String username,
+        @RequestParam(&quot;password&quot;) String password
+    ) {
+        try {
+<span class="fc" id="L30">            authUseCase.login(request, username, password);</span>
+<span class="fc" id="L31">            return ResponseEntity.ok(&quot;SUCCESS&quot;);</span>
+<span class="fc" id="L32">        } catch (WrongCredentialsException | UserLoggedInException e) {</span>
+<span class="fc" id="L33">            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();</span>
+        }
+    }
+
+    @PostMapping(&quot;logout&quot;)
+    public ResponseEntity&lt;String&gt; logout(
+        HttpServletRequest request
+    ) {
+<span class="fc" id="L41">        authUseCase.logout(request);</span>
+<span class="fc" id="L42">        return ResponseEntity.ok(&quot;SUCCESS&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SwaggerConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bm</a> &gt; <a href="index.source.html" class="el_package">com.mohammali.web.bm.config.swagger</a> &gt; <span class="el_source">SwaggerConfiguration.java</span></div><h1>SwaggerConfiguration.java</h1><pre class="source lang-java linenums">package com.mohammali.web.bm.config.swagger;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Configuration
+@EnableSwagger2
+<span class="fc" id="L24">@RequiredArgsConstructor</span>
+@EnableConfigurationProperties(SwaggerProperties.class)
+public class SwaggerConfiguration {
+
+    private final SwaggerProperties swaggerProperties;
+    private final ServerProperties serverProperties;
+
+    @Bean
+    public Docket swaggerDocumentation() {
+<span class="fc" id="L33">        return new Docket(DocumentationType.SWAGGER_2)</span>
+<span class="fc" id="L34">            .select()</span>
+<span class="fc" id="L35">            .apis(RequestHandlerSelectors.any())</span>
+<span class="fc" id="L36">            .paths(paths())</span>
+<span class="fc" id="L37">            .build()</span>
+<span class="fc" id="L38">            .protocols(protocols())</span>
+<span class="fc" id="L39">            .apiInfo(apiInfo());</span>
+    }
+
+    private Set&lt;String&gt; protocols() {
+<span class="fc" id="L43">        var set = new HashSet&lt;String&gt;();</span>
+<span class="pc bpc" id="L44" title="3 of 4 branches missed.">        if (serverProperties.getSsl() != null &amp;&amp; serverProperties.getSsl().isEnabled()) {</span>
+<span class="nc" id="L45">            set.add(&quot;https&quot;);</span>
+        } else {
+<span class="fc" id="L47">            set.add(&quot;http&quot;);</span>
+        }
+<span class="fc" id="L49">        return set;</span>
+    }
+
+    private ApiInfo apiInfo() {
+<span class="fc" id="L53">        return new ApiInfoBuilder()</span>
+<span class="fc" id="L54">            .title(swaggerProperties.getTitle())</span>
+<span class="fc" id="L55">            .description(swaggerProperties.getDescription())</span>
+<span class="fc" id="L56">            .termsOfServiceUrl(swaggerProperties.getTermsPath())</span>
+<span class="fc" id="L57">            .contact(new Contact(&quot;&quot;, &quot;&quot;, swaggerProperties.getEmail()))</span>
+<span class="fc" id="L58">            .license(swaggerProperties.getLicenceType())</span>
+<span class="fc" id="L59">            .licenseUrl(swaggerProperties.getLicencePath())</span>
+<span class="fc" id="L60">            .version(swaggerProperties.getVersion())</span>
+<span class="fc" id="L61">            .build();</span>
+    }
+
+    private Predicate&lt;String&gt; paths() {
+<span class="fc" id="L65">        return Predicates.or(PathSelectors.regex(&quot;/api.*&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
